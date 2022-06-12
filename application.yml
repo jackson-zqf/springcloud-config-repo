@@ -1,0 +1,27 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: resume-core
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/zqf_test?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: 123456
+  jpa:
+    database: MySQL
+    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl #避免将驼峰命名转换为下划线命名
+
+#eureka config  注册到eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eurekaServer8763:8763/eureka,http://eurekaServer8762:8762/eureka
+  instance:
+    prefer-ip-address: true  # 表示在eureka页面显示的时候，以ip进行显示并非主机名（高版本默认是ip了，这里就是为了兼容低版本）
+    # 192.168.47.1:resume-core:8080 ->  192.168.47.1:resume-core:8080:1.0-SNAPSHOT
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}:@project.version@
